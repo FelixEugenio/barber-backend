@@ -1,8 +1,9 @@
 import  jwt  from "jsonwebtoken";
+import { IPayloadDto } from "../../dtos/user.dto";
 
 async function generateToken(userId: string,role:string): Promise<string> {
 
-   const payload = {
+   const payload:IPayloadDto = {
         sub:userId,
         role:role
     }
