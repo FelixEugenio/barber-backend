@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+    id          String   @id @default(uuid())
+    name        String
+    email       String   @unique
+    password    String
+    avatar      String?
+    role        Role     @default(USER)
+    blocked     Boolean  @default(false)
+    phoneNumber String
+    created_at  DateTime? @default(now())
+    update_at   DateTime?  @default(now())
+
+    Appointment Appointment[]
+    Payment     Payment[]  // Relacionamento com Pagamentos
+    @@map("users")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Appointment {
+    id            String           @id @default(uuid())
+    scheduleAt    DateTime
+    status        AppointmentStatus
+    professionalId String
+    serviceId     String
+    userId        String
+    created_at    DateTime? @default(now())
+    update_at     DateTime? @default(now())
+
+    professional  Professional @relation(fields: [professionalId], references: [id])
+    service       Service @relation(fields: [serviceId], references: [id])
+    user          User @relation(fields: [userId], references: [id])
+
+    // Remover o atributo @relation em Appointment
+    // O relacionamento é definido no modelo Payment com o campo `appointmentId`
+    payment       Payment? @relation("AppointmentPayment") // Definir nome de relação opcional
+
+    @@map("appointments")
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+  COMPLETED
+}
+
+model Service {
+  id          String         @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  img         String?
+  duration    Int
+  created_at  DateTime? @default(now())
+  update_at   DateTime? @default(now())
+
+  Appointment Appointment[] // Relacionamento com Agendamentos
+  @@map("services")
+}
+
+model Professional {
+    id          String         @id @default(uuid())
+    name        String
+    specialty   String
+    avatar      String?
+    available   Boolean        @default(true)
+    created_at  DateTime? @default(now())
+    update_at   DateTime? @default(now())
+
+    Appointment Appointment[] // Relacionamento com Agendamentos
+    @@map("professionals")
+}
+
+model Payment {
+    id            String       @id @default(uuid())
+    appointmentId String       @unique // Adicionando a restrição única para garantir 1:1
+    userId        String       // Relacionamento com User
+    amount        Float        // Valor do pagamento
+    paymentStatus PaymentStatus @default(PENDING)
+    paymentDate   DateTime? @default(now())
+    created_at    DateTime? @default(now())
+    update_at     DateTime? @default(now())
+
+    user          User @relation(fields: [userId], references: [id])
+    appointment   Appointment @relation(fields: [appointmentId], references: [id], name: "AppointmentPayment") // Defina o nome da relação
+
+    @@map("payments")
+}
+
+enum PaymentStatus {
+    PENDING    // Pagamento pendente
+    COMPLETED  // Pagamento completado
+    FAILED     // Pagamento falhou
+    REFUNDED   // Pagamento reembolsado
+}
