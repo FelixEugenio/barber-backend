@@ -86,4 +86,10 @@ async function sendWelcomeEmail(email: string, name: string) {
 
 }
 
-export { sendBlockedAccountEmail };
+export { 
+    sendBlockedAccountEmail ,
+    sendCancelEmailAppointment,
+    sendUnBlockedAccountEmail,
+    sendWelcomeEmail,
+    sendAppointmentConfirmationEmail 
+};
