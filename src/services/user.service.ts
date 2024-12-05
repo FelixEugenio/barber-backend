@@ -68,12 +68,26 @@ export class UserService {
         return user;
     }
 
-    async block(userId:string):Promise<void> {
-        await this.userRepository.block(userId);
+    async block(userId:string) :Promise<IUserResponseDto>{
+
+        const user = await this.userRepository.findById(userId);
+
+        if(!user) {
+            throw new UserNotFoundError("Utilizador nao encontrado");
+        }
+
+      return  await this.userRepository.block(userId);
     }
 
-    async unBlock(userId:string):Promise<void> {
-        await this.userRepository.unBlock(userId);
+    async unBlock(userId:string):Promise<IUserResponseDto>{ 
+
+        const user = await this.userRepository.findById(userId);
+        
+        if(!user) {
+            throw new UserNotFoundError("Utilizador nao encontrado");
+        }
+
+        return await this.userRepository.unBlock(userId);
     }
 
     async profile(userId:string):Promise<IUserResponseDto> {

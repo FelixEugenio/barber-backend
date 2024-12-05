@@ -15,8 +15,10 @@ export class UsersControllers {
 
         const user = await userService.create(data);
 
-        await sendWelcomeEmail(user.name, user.email);
-        
+        await sendWelcomeEmail(user.email, user.name);
+
+        console.log(user.name,user.email)
+
         return res.status(201).json(user);
     }
 
