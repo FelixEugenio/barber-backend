@@ -6,28 +6,28 @@ const prisma = new PrismaClient();
 export class UserRepository {
     async create(data:ICreateUserDto):Promise<IUserResponseDto> {
         const user = await prisma.user.create({
-            data,
+            data:{
+                name:data.name,
+                email:data.email,
+                password:data.password,
+                avatar:data.avatar,
+                phoneNumber:data.phoneNumber
+            },
             select: {
                 id: true,
                 name: true,
                 email: true,
                 avatar: true,
-                phoneNumber: true
+                phoneNumber: true,
+                password:true
             }
         });
         return user;
     }
 
-    async findByEmail(email:string):Promise<IUserResponseDto> {
+    async findByEmail(email:string) {
         const user = await prisma.user.findUnique({
             where: { email },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                avatar: true,
-                phoneNumber: true
-            }
         });
         return user;
     }
@@ -50,7 +50,7 @@ export class UserRepository {
         return user;
     }
 
-    async delete(userId:string):Promise<void> {
+    async delete(userId:string) {
         await prisma.user.delete({where:{
             id:userId
         }});
@@ -71,7 +71,7 @@ export class UserRepository {
     }
 
     async findById(userId:string):Promise<IUserResponseDto> {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: { id:userId },
             select: {
                 id: true,
@@ -97,21 +97,26 @@ export class UserRepository {
         return users;
     }
 
-    async block(userId:string):Promise<void> {
-        await prisma.user.update({
+    async block(userId:string):Promise<IUserResponseDto> {
+      const user =  await prisma.user.update({
             where: { id:userId },
             data: {
                 blocked: true
             }
         });
+
+         return user;
     }
 
-    async unBlock():Promise<void> {
-        await prisma.user.updateMany({
+    async unBlock(userId:string):Promise<IUserResponseDto> {
+      const user =  await prisma.user.update({
+           where: { id:userId },
             data: {
                 blocked: false
             }
         });
+
+         return user;
     }
 }
 

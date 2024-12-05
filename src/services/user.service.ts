@@ -44,12 +44,6 @@ export class UserService {
         return token;
     }
 
-
-    async findByEmail(email:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.findByEmail(email);
-        return user;
-    }
-
     async update(data:IUpdateUserDto, userId:string):Promise<IUserResponseDto> {
         const user = await this.userRepository.update(data, userId);
         return user;
@@ -79,7 +73,7 @@ export class UserService {
     }
 
     async unBlock(userId:string):Promise<void> {
-        await this.userRepository.unBlock();
+        await this.userRepository.unBlock(userId);
     }
 
     async profile(userId:string):Promise<IUserResponseDto> {
