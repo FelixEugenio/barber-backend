@@ -4,7 +4,6 @@ export interface ICreateUserDto {
     password: string;
     avatar?: string;
     phoneNumber: string;
-    
 }
 
 export interface IUpdateUserDto {
@@ -26,10 +25,8 @@ export interface IUserResponseDto {
     email: string;
     avatar?: string;
     phoneNumber: string;
-    role?:string;
 }
 
 export interface IPayloadDto {
     sub: string;  // O ID do usuário
-    role: string;
 }

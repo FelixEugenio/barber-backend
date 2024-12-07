@@ -3,7 +3,7 @@ import { UserRepository } from "../repositories/user.repository";
 import { UserNotFoundError, InvalidPasswordError,ConflictError } from "../utils/error/error.types";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import generateToken from "../helpers/auth/generate.token";
+import { sign } from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
@@ -40,8 +40,25 @@ export class UserService {
             throw new InvalidPasswordError("Palavra Passe Invalida");
         }
 
-        const token = generateToken(user.id,user.role);
-        return token;
+        const token = sign(
+            {
+                name:user.name,
+                email:user.email
+            },
+            process.env.JWT_SECRET,
+            {
+                subject:user.id,
+                expiresIn:"1h"
+            }
+            
+        )
+        
+        return {
+            id:user.id,
+            name:user.name,
+            email:user.email,
+            token
+        };
     }
 
     async update(data:IUpdateUserDto, userId:string):Promise<IUserResponseDto> {
@@ -58,7 +75,7 @@ export class UserService {
         return users;
     }
 
-    async Userprofile(userId:string):Promise<IUserResponseDto> {
+    async userprofile(userId:string):Promise<IUserResponseDto> {
         const user = await this.userRepository.profile(userId);
         return user;
     }

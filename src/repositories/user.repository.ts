@@ -57,7 +57,7 @@ export class UserRepository {
     }
 
     async profile(userId:string):Promise<IUserResponseDto> {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: { id:userId },
             select: {
                 id: true,

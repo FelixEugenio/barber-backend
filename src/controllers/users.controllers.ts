@@ -44,7 +44,7 @@ export class UsersControllers {
 
         const userId = req.params.id;
 
-        const user = await userService.profile(userId);
+        const user = await userService.userprofile(userId);
 
         return res.status(200).json(user);
     }
@@ -69,5 +69,15 @@ export class UsersControllers {
         sendUnBlockedAccountEmail(user.email, user.name);
 
         return res.status(200).json(user);
+    }
+
+    async update(req:Request,res:Response) {
+
+
+    }
+
+    async findAll(){
+        const users = await userService.findAll();
+        return users;
     }
 }    

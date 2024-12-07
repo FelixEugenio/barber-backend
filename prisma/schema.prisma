@@ -13,7 +13,6 @@ model User {
     email       String   @unique
     password    String
     avatar      String?
-    role        Role     @default(USER)
     blocked     Boolean  @default(false)
     phoneNumber String
     created_at  DateTime? @default(now())
@@ -22,11 +21,6 @@ model User {
     Appointment Appointment[]
     Payment     Payment[]  // Relacionamento com Pagamentos
     @@map("users")
-}
-
-enum Role {
-  ADMIN
-  USER
 }
 
 model Appointment {
