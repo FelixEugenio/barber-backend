@@ -96,4 +96,14 @@ export class UsersControllers {
         return res.status(200).json(user);
 
     }
+
+    async delete(req:Request,res:Response) {
+
+        const userId = req.params.id;
+
+        await userService.delete(userId);
+
+        return res.status(200).json({message:"User deleted"});
+
+    }
 }    

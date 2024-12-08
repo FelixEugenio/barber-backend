@@ -13,10 +13,11 @@ routes.post("/users", usersControllers.register);
 routes.post('/login',usersControllers.login);
 routes.get('/profile/:id',isAuthenticated,usersControllers.profile);
 routes.get('/logout',isAuthenticated,usersControllers.logout);
-routes.post('/block/:id',isAuthenticated,usersControllers.block);
 routes.get('/unblock/:id',isAuthenticated,usersControllers.unBlock);
+routes.get('/block/:id',isAuthenticated,usersControllers.block);
 routes.get('/users',isAuthenticated,usersControllers.findAll);
-routes.put('/users/:id',upload.single("file"),usersControllers.update);
+routes.put('/users/:id',isAuthenticated,upload.single("file"),usersControllers.update);
+routes.delete('/users/:id',isAuthenticated,usersControllers.delete);
 
 
 export { routes };

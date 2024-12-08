@@ -32,9 +32,9 @@ export class UserRepository {
         return user;
     }
 
-    async delete(userId:string) {
+    async delete(id:string) {
         await prisma.user.delete({where:{
-            id:userId
+            id:id
         }});
     }
 
@@ -52,9 +52,9 @@ export class UserRepository {
         return user;
     }
 
-    async findById(userId:string):Promise<IUserResponseDto> {
+    async findById(id:string):Promise<IUserResponseDto> {
         const user = await prisma.user.findFirst({
-            where: { id:userId },
+            where: { id:id },
             select: {
                 id: true,
                 name: true,
@@ -79,9 +79,9 @@ export class UserRepository {
         return users;
     }
 
-    async block(userId:string):Promise<IUserResponseDto> {
+    async block(id:string):Promise<IUserResponseDto> {
       const user =  await prisma.user.update({
-            where: { id:userId },
+            where: { id:id },
             data: {
                 blocked: true
             }
@@ -90,9 +90,9 @@ export class UserRepository {
          return user;
     }
 
-    async unBlock(userId:string):Promise<IUserResponseDto> {
+    async unBlock(id:string):Promise<IUserResponseDto> {
       const user =  await prisma.user.update({
-           where: { id:userId },
+           where: { id:id },
             data: {
                 blocked: false
             }
@@ -101,7 +101,7 @@ export class UserRepository {
          return user;
     }
 
-    async updateUser(id:string,data:IUpdateUserDto):Promise<IUserResponseDto>  {
+    async update(id:string,data:IUpdateUserDto):Promise<IUserResponseDto>  {
 
         const user = await prisma.user.update({
             where: { id:id },

@@ -62,8 +62,15 @@ export class UserService {
         };
     }
 
-    async delete(userId:string):Promise<void> {
-        await this.userRepository.delete(userId);
+    async delete(id:string) {
+
+        const user = await this.userRepository.findById(id);
+
+        if(!user) {
+            throw new UserNotFoundError("Utilizador nao encontrado");
+        }
+
+        await this.userRepository.delete(id);
     }
 
     async findAll():Promise<IUserResponseDto[]> {
@@ -71,40 +78,47 @@ export class UserService {
         return users;
     }
 
-    async userprofile(userId:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.profile(userId);
-        return user;
-    }
+    async userprofile(id:string):Promise<IUserResponseDto> {
 
-    async findById(userId:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.findById(userId);
-        return user;
-    }
-
-    async block(userId:string) :Promise<IUserResponseDto>{
-
-        const user = await this.userRepository.findById(userId);
+        const user = await this.userRepository.findById(id);
 
         if(!user) {
             throw new UserNotFoundError("Utilizador nao encontrado");
         }
 
-      return  await this.userRepository.block(userId);
+        const userProfile = await this.userRepository.profile(id);
+        return userProfile;
     }
 
-    async unBlock(userId:string):Promise<IUserResponseDto>{ 
+    async findById(id:string):Promise<IUserResponseDto> {
+        const user = await this.userRepository.findById(id);
+        return user;
+    }
 
-        const user = await this.userRepository.findById(userId);
+    async block(id:string) :Promise<IUserResponseDto>{
+
+        const user = await this.userRepository.findById(id);
+
+        if(!user) {
+            throw new UserNotFoundError("Utilizador nao encontrado");
+        }
+
+      return  await this.userRepository.block(id);
+    }
+
+    async unBlock(id:string):Promise<IUserResponseDto>{ 
+
+        const user = await this.userRepository.findById(id);
         
         if(!user) {
             throw new UserNotFoundError("Utilizador nao encontrado");
         }
 
-        return await this.userRepository.unBlock(userId);
+        return await this.userRepository.unBlock(id);
     }
 
-    async profile(userId:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.profile(userId);
+    async profile(id:string):Promise<IUserResponseDto> {
+        const user = await this.userRepository.profile(id);
         return user;
     }
 
@@ -116,7 +130,7 @@ export class UserService {
             throw new UserNotFoundError("Utilizador nao encontrado");
         }
         
-        return await this.userRepository.updateUser(id,data);
+        return await this.userRepository.update(id,data);
 
     }
      
