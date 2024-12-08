@@ -2,8 +2,8 @@ import { ICreateUserDto,ILoginUserDto,IUpdateUserDto,IUserResponseDto } from "..
 import { UserService } from "../services/user.service";
 import { Request,Response } from "express";
 import { cookieConfig } from "../config/cookie.config";
-import { uploadServiceImage } from "../utils/cloudinary/cloudinary";
 import { sendBlockedAccountEmail, sendUnBlockedAccountEmail, sendWelcomeEmail } from "../utils/mail/send.mail.messages";
+import { uploadUserAvatar } from "../utils/cloudinary/cloudinary";
 
 const userService = new UserService();
 
@@ -69,11 +69,6 @@ export class UsersControllers {
         sendUnBlockedAccountEmail(user.email, user.name);
 
         return res.status(200).json(user);
-    }
-
-    async update(req:Request,res:Response) {
-
-
     }
 
     async findAll(){

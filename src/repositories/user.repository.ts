@@ -32,24 +32,6 @@ export class UserRepository {
         return user;
     }
 
-    async update(data:IUpdateUserDto, userId:string):Promise<IUserResponseDto> {
-        const user = await prisma.user.update({
-            where: { 
-                id:userId
-             },
-            data,
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                avatar: true,
-                phoneNumber: true
-            }
-
-        });
-        return user;
-    }
-
     async delete(userId:string) {
         await prisma.user.delete({where:{
             id:userId

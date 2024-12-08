@@ -17,6 +17,7 @@ export class UserService {
     async create(data:ICreateUserDto):Promise<IUserResponseDto> {
         
         const verifyIfUserAlreadyExists = await this.userRepository.findByEmail(data.email);
+
         if(verifyIfUserAlreadyExists) {
             throw new ConflictError("Utilizador já existe");
         }
@@ -59,11 +60,6 @@ export class UserService {
             email:user.email,
             token
         };
-    }
-
-    async update(data:IUpdateUserDto, userId:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.update(data, userId);
-        return user;
     }
 
     async delete(userId:string):Promise<void> {
