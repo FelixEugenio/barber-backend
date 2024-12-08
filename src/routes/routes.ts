@@ -17,7 +17,7 @@ routes.get('/unblock/:id',isAuthenticated,usersControllers.unBlock);
 routes.get('/block/:id',isAuthenticated,usersControllers.block);
 routes.get('/users',isAuthenticated,usersControllers.findAll);
 routes.put('/users/:id',isAuthenticated,upload.single("file"),usersControllers.update);
-routes.delete('/users/:id',isAuthenticated,usersControllers.delete);
+routes.delete('/users/delete/:id',isAuthenticated,usersControllers.delete);
 
 
 export { routes };

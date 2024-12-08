@@ -1,7 +1,7 @@
 import { ICreateUserDto,ILoginUserDto,IUpdateUserDto,IUserResponseDto } from "../dtos/user.dto";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 export class UserRepository {
     async create(data:ICreateUserDto):Promise<IUserResponseDto> {
