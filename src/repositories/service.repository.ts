@@ -39,16 +39,7 @@ export class ServiceRepository {
     }
 
     async findAll():Promise<IServiceResponseDto[]> {
-        const services = await prisma.service.findMany({
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                price: true,
-                duration: true,
-                img: true
-            }
-        }); 
+        const services = await prisma.service.findMany(); 
         return services;
     }
 

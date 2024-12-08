@@ -3,12 +3,14 @@ import { isAuthenticated } from "../middlewares/auth.middleware";
 import { UsersControllers } from "../controllers/users.controllers";
 import { ServiceController } from "../controllers/service.controllers";
 import { ProfessionalController } from "../controllers/professional.controllers";
+import { AppointmentController } from "../controllers/appointment.controllers";
 import uploadConfig from "../config/multer.config";
 import multer from "multer";
 
 const usersControllers = new UsersControllers();
 const professionalController = new ProfessionalController();
 const serviceController = new ServiceController();
+const appointmentController = new AppointmentController();
 
 const upload = multer(uploadConfig.upload("../tmp"));
 
@@ -37,6 +39,13 @@ routes.get('/services',isAuthenticated,serviceController.findAll);
 routes.get('/service/:id',isAuthenticated,serviceController.findById);
 routes.put('/service/:id',isAuthenticated,upload.single("file"),serviceController.update);
 routes.delete('/service/:id',isAuthenticated,serviceController.delete);
+
+routes.post('/appointments',isAuthenticated,appointmentController.create);
+routes.get('/appointments',isAuthenticated,appointmentController.getAll);
+routes.get('/appointment/:id',isAuthenticated,appointmentController.getOne);
+routes.put('/appointment/:id',isAuthenticated,appointmentController.update);
+routes.delete('/appointment/:id',isAuthenticated,appointmentController.delete);
+routes.get('/appointment/cancel/:id',isAuthenticated,appointmentController.cancel);
 
 
 export { routes };

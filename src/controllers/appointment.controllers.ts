@@ -1,6 +1,5 @@
 import { Request,Response } from "express";
 import { AppointmentService } from "../services/appointment.service";
-import { IAppointmentCreateAndCancelResponseDto } from "../dtos/appointment.dto";
 import { isValidDate } from "../helpers/validation/is-valid-date";
 import { sendAppointmentConfirmationEmail } from "../utils/mail/send.mail.messages";
 import { sendCancelAppointmentEmail } from "../utils/mail/send.mail.messages";
