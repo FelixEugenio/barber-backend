@@ -107,5 +107,17 @@ export class UserService {
         const user = await this.userRepository.profile(userId);
         return user;
     }
+
+    async update(id:string,data:IUpdateUserDto):Promise<IUserResponseDto>{
+
+        const user = await this.userRepository.findById(id);
+
+        if(!user) {
+            throw new UserNotFoundError("Utilizador nao encontrado");
+        }
+        
+        return await this.userRepository.updateUser(id,data);
+
+    }
      
 }

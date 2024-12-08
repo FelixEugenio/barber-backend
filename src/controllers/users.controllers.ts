@@ -71,8 +71,29 @@ export class UsersControllers {
         return res.status(200).json(user);
     }
 
-    async findAll(){
+    async findAll(req:Request,res:Response) {
+
         const users = await userService.findAll();
-        return users;
+
+        return res.status(200).json(users);
+    }
+
+    async update(req:Request,res:Response) {
+
+        const userId = req.params.id;
+
+        const file = req.file;
+        
+        const userData:IUpdateUserDto = req.body;
+
+        if(file) {
+            const imageUrl = await uploadUserAvatar(file.path);
+            userData.avatar = imageUrl;
+        }
+
+        const user = await userService.update(userId,userData);
+
+        return res.status(200).json(user);
+
     }
 }    

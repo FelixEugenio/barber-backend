@@ -9,13 +9,14 @@ const upload = multer(uploadConfig.upload("../tmp"));
 
 const routes = Router();
 
-routes.post("/register", usersControllers.register);
+routes.post("/users", usersControllers.register);
 routes.post('/login',usersControllers.login);
 routes.get('/profile/:id',isAuthenticated,usersControllers.profile);
 routes.get('/logout',isAuthenticated,usersControllers.logout);
 routes.post('/block/:id',isAuthenticated,usersControllers.block);
 routes.get('/unblock/:id',isAuthenticated,usersControllers.unBlock);
 routes.get('/users',isAuthenticated,usersControllers.findAll);
+routes.put('/users/:id',upload.single("file"),usersControllers.update);
 
 
 export { routes };

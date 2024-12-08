@@ -100,6 +100,28 @@ export class UserRepository {
 
          return user;
     }
+
+    async updateUser(id:string,data:IUpdateUserDto):Promise<IUserResponseDto>  {
+
+        const user = await prisma.user.update({
+            where: { id:id },
+            data:{
+                name:data.name,
+                email:data.email,
+                password:data.password,
+                avatar:data.avatar,
+                phoneNumber:data.phoneNumber
+            },select: {
+                id: true,
+                name: true,
+                email: true,
+                avatar: true,
+                phoneNumber: true
+            }
+        });
+
+        return user;
+    }
 }
 
     
