@@ -57,7 +57,7 @@ model Service {
   description String?
   price       Float
   img         String?
-  duration    Int
+  duration    Int?
   created_at  DateTime? @default(now())
   update_at   DateTime? @default(now())
 

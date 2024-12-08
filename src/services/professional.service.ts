@@ -10,8 +10,12 @@ export class ProfessionalService {
     }
 
     async create(data:ICreateProfessionalDto):Promise<IProfessionalResponseDto>{
-        
-        return await this.professionalRepository.create(data);
+        try{
+            return await this.professionalRepository.create(data);
+
+        }catch(err){
+            console.log(err);
+        }
     }
 
     async update(id:string,data:IUpdateProfessionalDto):Promise<IProfessionalResponseDto>{

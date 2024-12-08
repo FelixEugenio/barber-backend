@@ -2,7 +2,7 @@ export interface ICreateServiceDto {
     name: string;
     description: string;
     price: number;
-    duration: number;
+    duration?: number;
     img?: string;
 }
 

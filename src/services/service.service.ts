@@ -49,4 +49,10 @@ export class ServiceService {
 
     }
 
+    async findById(id:string):Promise<IServiceResponseDto>  {
+
+        return await this.serviceRepository.findById(id);
+
+    }
+
 }

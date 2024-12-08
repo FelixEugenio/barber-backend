@@ -2,7 +2,6 @@ export interface ICreateProfessionalDto {
     name: string;
     avatar?: string;
     specialty: string;
-    available: boolean;
 }
 
 export interface IUpdateProfessionalDto {

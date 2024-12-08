@@ -8,7 +8,6 @@ export class ProfessionalRepository {
             data: {
                 name: data.name,
                 specialty: data.specialty,
-                available: data.available,
                 avatar: data.avatar
             },select: {
                 id: true,

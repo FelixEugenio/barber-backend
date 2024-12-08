@@ -40,7 +40,7 @@ CREATE TABLE "services" (
     "description" TEXT,
     "price" DOUBLE PRECISION NOT NULL,
     "img" TEXT,
-    "duration" INTEGER NOT NULL,
+    "duration" INTEGER,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
