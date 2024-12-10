@@ -1,5 +1,7 @@
-
-export const WELCOME_EMAIL_TEMPLATE = (name: string) => `
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PASSWORD_RESET_REQUEST_TEMPLATE = exports.PASSWORD_RESET_SUCCESS_TEMPLATE = exports.VERIFICATION_EMAIL_TEMPLATE = exports.UNBLOCK_USER_EMAIL_TEMPLATE = exports.BLOCK_USER_EMAIL_TEMPLATE = exports.CANCEL_APPOINTMENT_EMAIL_TEMPLATE = exports.APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = exports.WELCOME_EMAIL_TEMPLATE = void 0;
+const WELCOME_EMAIL_TEMPLATE = (name) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +27,8 @@ export const WELCOME_EMAIL_TEMPLATE = (name: string) => `
 </body>
 </html>
 `;
-
-export const APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = (name: string, appointmentDate: string, qrCodeUrl: string) => `
+exports.WELCOME_EMAIL_TEMPLATE = WELCOME_EMAIL_TEMPLATE;
+const APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = (name, appointmentDate, qrCodeUrl) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,10 +63,8 @@ export const APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = (name: string, appointmen
 </body>
 </html>
 `;
-
-
-
-export const CANCEL_APPOINTMENT_EMAIL_TEMPLATE = (name: string, appointmentDate: string) => `
+exports.APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE;
+const CANCEL_APPOINTMENT_EMAIL_TEMPLATE = (name, appointmentDate) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,9 +91,8 @@ export const CANCEL_APPOINTMENT_EMAIL_TEMPLATE = (name: string, appointmentDate:
 </body>
 </html>
 `;
-
-
-export const BLOCK_USER_EMAIL_TEMPLATE = (name: string) => `
+exports.CANCEL_APPOINTMENT_EMAIL_TEMPLATE = CANCEL_APPOINTMENT_EMAIL_TEMPLATE;
+const BLOCK_USER_EMAIL_TEMPLATE = (name) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,8 +118,8 @@ export const BLOCK_USER_EMAIL_TEMPLATE = (name: string) => `
 </body>
 </html>
 `;
-
-export const UNBLOCK_USER_EMAIL_TEMPLATE = (name: string) => `
+exports.BLOCK_USER_EMAIL_TEMPLATE = BLOCK_USER_EMAIL_TEMPLATE;
+const UNBLOCK_USER_EMAIL_TEMPLATE = (name) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,9 +145,8 @@ export const UNBLOCK_USER_EMAIL_TEMPLATE = (name: string) => `
 </body>
 </html>
 `;
-
-
-export const VERIFICATION_EMAIL_TEMPLATE = `
+exports.UNBLOCK_USER_EMAIL_TEMPLATE = UNBLOCK_USER_EMAIL_TEMPLATE;
+exports.VERIFICATION_EMAIL_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -177,8 +175,7 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
 </body>
 </html>
 `;
-
-export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
+exports.PASSWORD_RESET_SUCCESS_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -214,8 +211,7 @@ export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 </body>
 </html>
 `;
-
-export const PASSWORD_RESET_REQUEST_TEMPLATE = `
+exports.PASSWORD_RESET_REQUEST_TEMPLATE = `
 <!DOCTYPE html>
 <html lang="en">
 <head>

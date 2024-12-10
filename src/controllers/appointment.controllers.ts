@@ -5,6 +5,7 @@ import { sendAppointmentConfirmationEmail } from "../utils/mail/send.mail.messag
 import { sendCancelAppointmentEmail } from "../utils/mail/send.mail.messages";
 import {io} from '../server'
 import { generateAndUploadQrCodeToCloudinary } from "../utils/cloudinary/cloudinary";
+import cloudinary from "../config/cloudinary.config";
 
 const appointmentService = new AppointmentService();
 
@@ -45,7 +46,9 @@ export class AppointmentController {
 
     async cancel(req: Request, res: Response) {
         const { id } = req.params;
+
         const appointment = await appointmentService.cancel(id);
+
 
         const formattedDate = new Date(appointment.scheduleAt).toLocaleDateString('pt-BR', {
             day: '2-digit',

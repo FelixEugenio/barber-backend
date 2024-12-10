@@ -6,7 +6,12 @@
   "author": "felix eugenio mavila <felixmacarenco@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts"
+    "start": "node ./build/server.js",
+    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
+    "prisma:migrate": "prisma migrate dev --schema=./src/prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema=./src/prisma/schema.prisma",
+    "postinstall": "yarn prisma:generate",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
