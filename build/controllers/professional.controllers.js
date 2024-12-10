@@ -14,62 +14,97 @@ const professional_service_1 = require("../services/professional.service");
 const cloudinary_1 = require("../utils/cloudinary/cloudinary");
 const professionalService = new professional_service_1.ProfessionalService();
 class ProfessionalController {
-    create(req, res) {
+    create(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = req.body;
-            const file = req.file;
-            if (file) {
-                const imageUrl = yield (0, cloudinary_1.uploadProfessionalAvatar)(file.path);
-                data.avatar = imageUrl;
+            try {
+                const data = req.body;
+                const file = req.file;
+                if (file) {
+                    const imageUrl = yield (0, cloudinary_1.uploadProfessionalAvatar)(file.path);
+                    data.avatar = imageUrl;
+                }
+                const professional = yield professionalService.create(data);
+                return res.status(201).json(professional);
             }
-            const professional = yield professionalService.create(data);
-            return res.status(201).json(professional);
-        });
-    }
-    update(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const id = req.params.id;
-            const file = req.file;
-            const data = req.body;
-            if (file) {
-                const imageUrl = yield (0, cloudinary_1.uploadProfessionalAvatar)(file.path);
-                req.body.avatar = imageUrl;
+            catch (err) {
+                next(err);
             }
-            const professional = yield professionalService.update(id, data);
-            return res.status(200).json(professional);
         });
     }
-    delete(req, res) {
+    update(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = req.params.id;
-            const professional = yield professionalService.delete(id);
-            return res.status(200).json(professional);
+            try {
+                const id = req.params.id;
+                const file = req.file;
+                const data = req.body;
+                if (file) {
+                    const imageUrl = yield (0, cloudinary_1.uploadProfessionalAvatar)(file.path);
+                    req.body.avatar = imageUrl;
+                }
+                const professional = yield professionalService.update(id, data);
+                return res.status(200).json(professional);
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
-    findAll(req, res) {
+    delete(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const professionals = yield professionalService.findAll();
-            return res.status(200).json(professionals);
+            try {
+                const id = req.params.id;
+                const professional = yield professionalService.delete(id);
+                return res.status(200).json(professional);
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
-    findBySpecialty(req, res) {
+    findAll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const specialty = req.params.specialty;
-            const professionals = yield professionalService.findBySpecialty(specialty);
-            return res.status(200).json(professionals);
+            try {
+                const professionals = yield professionalService.findAll();
+                return res.status(200).json(professionals);
+            }
+            catch (err) {
+                next(err);
+            }
         });
     }
-    findByAvailable(req, res) {
+    findBySpecialty(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const professionals = yield professionalService.findByAvailable();
-            return res.status(200).json(professionals);
+            try {
+                const specialty = req.params.specialty;
+                const professionals = yield professionalService.findBySpecialty(specialty);
+                return res.status(200).json(professionals);
+            }
+            catch (error) {
+                next(error);
+            }
         });
     }
-    profile(req, res) {
+    findByAvailable(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = req.params.id;
-            const professional = yield professionalService.profile(id);
-            return res.status(200).json(professional);
+            try {
+                const professionals = yield professionalService.findByAvailable();
+                return res.status(200).json(professionals);
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    profile(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params.id;
+                const professional = yield professionalService.profile(id);
+                return res.status(200).json(professional);
+            }
+            catch (error) {
+                next(error);
+            }
         });
     }
 }

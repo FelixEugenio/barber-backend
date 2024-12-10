@@ -3,12 +3,12 @@ import jwt from "jsonwebtoken";
 import { IPayloadDto } from "../dtos/user.dto";
 import { verify } from "jsonwebtoken";
 
-export async function isAuthenticated(req:Request,res:Response,next:NextFunction){
+export async function isAuthenticated(req:Request,res:Response,next:NextFunction): Promise<void>{
 
     const authHeader = req.headers.authorization;
 
     if(!authHeader){
-        return res.status(401).json({message:"Token not found"});
+        throw new Error("Token not found");
     }
 
     const [ ,token] = authHeader.split(" ");
@@ -21,6 +21,6 @@ export async function isAuthenticated(req:Request,res:Response,next:NextFunction
        return next();
        
     }catch(err){
-        return res.status(401).end();
+        next(err);
     }
 }

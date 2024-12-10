@@ -15,7 +15,7 @@ function isAuthenticated(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const authHeader = req.headers.authorization;
         if (!authHeader) {
-            return res.status(401).json({ message: "Token not found" });
+            throw new Error("Token not found");
         }
         const [, token] = authHeader.split(" ");
         try {
@@ -24,7 +24,7 @@ function isAuthenticated(req, res, next) {
             return next();
         }
         catch (err) {
-            return res.status(401).end();
+            next(err);
         }
     });
 }

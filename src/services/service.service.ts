@@ -1,6 +1,5 @@
 import { ICreateServiceDto,IServiceResponseDto,IUpdateServiceDto } from "../dtos/service.dto";
 import { ServiceRepository } from "../repositories/service.repository";
-import { ConflictError } from "../utils/error/error.types";
 
 export class ServiceService {
     private serviceRepository:ServiceRepository;
@@ -14,7 +13,7 @@ export class ServiceService {
         const verifyIfServiceAlreadyExists = await this.serviceRepository.findByName(data.name);
 
         if(verifyIfServiceAlreadyExists.length > 0) {
-            throw new ConflictError("Servico ja cadastrado");
+            throw Error("Servico ja cadastrado");
         }
 
         return await this.serviceRepository.create(data);
@@ -25,7 +24,7 @@ export class ServiceService {
         const service = await this.serviceRepository.findById(id);
 
         if(!service) {
-            throw new ConflictError("Servico nao encontrado");
+            throw new Error("Servico nao encontrado");
         }
 
         return await this.serviceRepository.update(id,data);
@@ -36,7 +35,7 @@ export class ServiceService {
         const service = await this.serviceRepository.findById(id);
 
         if(!service) {
-            throw new ConflictError("Servico nao encontrado");
+            throw new Error("Servico nao encontrado");
         }
 
         return await this.serviceRepository.delete(id);

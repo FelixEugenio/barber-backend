@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfessionalService = void 0;
 const professional_repository_1 = require("../repositories/professional.repository");
-const error_types_1 = require("../utils/error/error.types");
 class ProfessionalService {
     constructor() {
         this.professionalRepository = new professional_repository_1.ProfessionalRepository();
@@ -22,46 +21,76 @@ class ProfessionalService {
                 return yield this.professionalRepository.create(data);
             }
             catch (err) {
-                console.log(err);
+                console.log(err.message);
             }
         });
     }
     update(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const professional = yield this.professionalRepository.findById(id);
-            if (!professional) {
-                throw new error_types_1.ConflictError("Profissional nao encontrado");
+            try {
+                const professional = yield this.professionalRepository.findById(id);
+                if (!professional) {
+                    throw new Error("Profissional nao encontrado");
+                }
+                return yield this.professionalRepository.update(id, data);
             }
-            return yield this.professionalRepository.update(id, data);
+            catch (err) {
+                console.log(err.message);
+            }
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const professional = yield this.professionalRepository.findById(id);
-            if (!professional) {
-                throw new error_types_1.ConflictError("Profissional nao encontrado");
+            try {
+                const professional = yield this.professionalRepository.findById(id);
+                if (!professional) {
+                    throw new Error("Profissional nao encontrado");
+                }
+                return yield this.professionalRepository.delete(id);
             }
-            return yield this.professionalRepository.delete(id);
+            catch (err) {
+                console.log(err.message);
+            }
         });
     }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.professionalRepository.findAll();
+            try {
+                return yield this.professionalRepository.findAll();
+            }
+            catch (err) {
+                console.log(err.message);
+            }
         });
     }
     findBySpecialty(specialty) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.professionalRepository.findBySpecialty(specialty);
+            try {
+                return yield this.professionalRepository.findBySpecialty(specialty);
+            }
+            catch (err) {
+                console.log(err.message);
+            }
         });
     }
     findByAvailable() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.professionalRepository.findByAvailable();
+            try {
+                return yield this.professionalRepository.findByAvailable();
+            }
+            catch (err) {
+                console.log(err.message);
+            }
         });
     }
     profile(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.professionalRepository.profile(id);
+            try {
+                return yield this.professionalRepository.profile(id);
+            }
+            catch (err) {
+                console.log(err.message);
+            }
         });
     }
 }

@@ -1,6 +1,5 @@
 import { ICreateUserDto,ILoginUserDto,IUpdateUserDto,IUserResponseDto } from "../dtos/user.dto";
 import { UserRepository } from "../repositories/user.repository";
-import { UserNotFoundError, InvalidPasswordError,ConflictError } from "../utils/error/error.types";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { sign } from "jsonwebtoken";
@@ -15,11 +14,11 @@ export class UserService {
     }
 
     async create(data:ICreateUserDto):Promise<IUserResponseDto> {
-        
-        const verifyIfUserAlreadyExists = await this.userRepository.findByEmail(data.email);
+        try{
+            const verifyIfUserAlreadyExists = await this.userRepository.findByEmail(data.email);
 
         if(verifyIfUserAlreadyExists) {
-            throw new ConflictError("Utilizador já existe");
+            throw new Error("Utilizador já existe");
         }
 
         const passwordHash = await bcrypt.hash(data.password, 8);
@@ -27,18 +26,24 @@ export class UserService {
         const user = await this.userRepository.create({...data, password:passwordHash});
 
         return user;
+
+        }catch(err){
+            console.log(err.message);
+        }
+        
+        
     }
 
     async login(loginData:ILoginUserDto){
-
-        const user = await this.userRepository.findByEmail(loginData.email);
+        try{
+            const user = await this.userRepository.findByEmail(loginData.email);
         if(!user) {
-            throw new UserNotFoundError();
+            throw new Error("Utilizador nao encontrado");
         }
 
         const isValidPassword = await bcrypt.compare(loginData.password, user.password);
         if(!isValidPassword) {
-            throw new InvalidPasswordError("Palavra Passe Invalida");
+            throw new Error("Palavra Passe Invalida");
         }
 
         const token = sign(
@@ -60,83 +65,139 @@ export class UserService {
             email:user.email,
             token
         };
+
+        }catch(err) {
+            console.log(err.message);
+        }
+
+        
     }
 
     async delete(id:string) {
+        try{
+            const user = await this.userRepository.findById(id);
 
-        const user = await this.userRepository.findById(id);
-
-        if(!user) {
-            throw new UserNotFoundError("Utilizador nao encontrado");
+            if(!user) {
+                throw new Error("Utilizador nao encontrado");
+            }
+    
+            await this.userRepository.delete(id);
+        }catch(err) {
+            console.log(err.message);
         }
 
-        await this.userRepository.delete(id);
+        
     }
 
     async findAll():Promise<IUserResponseDto[]> {
-        const users = await this.userRepository.findAll();
+        try{
+            const users = await this.userRepository.findAll();
         return users;
+
+        }catch(err) {
+            console.log(err.message);
+        }
+        
     }
 
     async userprofile(id:string):Promise<IUserResponseDto> {
-
-        const user = await this.userRepository.findById(id);
+        try{
+            const user = await this.userRepository.findById(id);
 
         if(!user) {
-            throw new UserNotFoundError("Utilizador nao encontrado");
+            throw new Error("Utilizador nao encontrado");
         }
 
         const userProfile = await this.userRepository.profile(id);
         return userProfile;
+
+        }catch(err) {
+            console.log(err.message);
+        }
+
+        
     }
 
     async findById(id:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.findById(id);
+        try{
+            const user = await this.userRepository.findById(id);
         return user;
+
+        }catch(err) {
+            console.log(err.message);
+        }
+        
     }
 
     async block(id:string) :Promise<IUserResponseDto>{
-
-        const user = await this.userRepository.findById(id);
+        try{
+            const user = await this.userRepository.findById(id);
 
         if(!user) {
-            throw new UserNotFoundError("Utilizador nao encontrado");
+            throw new Error("Utilizador nao encontrado");
         }
 
       return  await this.userRepository.block(id);
+
+        }catch(err) {
+            console.log(err.message);
+        }
+
+        
     }
 
     async unBlock(id:string):Promise<IUserResponseDto>{ 
 
-        const user = await this.userRepository.findById(id);
+        try{
+            const user = await this.userRepository.findById(id);
         
         if(!user) {
-            throw new UserNotFoundError("Utilizador nao encontrado");
+            throw new Error("Utilizador nao encontrado");
         }
 
         return await this.userRepository.unBlock(id);
+
+        }catch(err) {   
+            console.log(err.message);
+        }
+
+        
     }
 
     async profile(id:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.profile(id);
-        return user;
+        try{
+            const user = await this.userRepository.profile(id);
+            return user;
+        }catch(err) {
+            console.log(err.message);
+        }
+        
     }
 
     async update(id:string,data:IUpdateUserDto):Promise<IUserResponseDto>{
 
-        const user = await this.userRepository.findById(id);
+        try{
+            const user = await this.userRepository.findById(id);
 
         if(!user) {
-            throw new UserNotFoundError("Utilizador nao encontrado");
+            throw new Error("Utilizador nao encontrado");
         }
         
         return await this.userRepository.update(id,data);
+        }catch(err) {
+            console.log(err.message);
+        }
 
     }
 
     async findByEmail(email:string):Promise<IUserResponseDto> {
-        const user = await this.userRepository.findByEmail(email);
-        return user;
+        try{
+            const user = await this.userRepository.findByEmail(email);
+            return user;
+        }catch(error) {
+            throw new Error("Utilizador nao encontrado");
+        }
+        
 
     }
      

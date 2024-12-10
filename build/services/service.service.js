@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServiceService = void 0;
 const service_repository_1 = require("../repositories/service.repository");
-const error_types_1 = require("../utils/error/error.types");
 class ServiceService {
     constructor() {
         this.serviceRepository = new service_repository_1.ServiceRepository();
@@ -20,7 +19,7 @@ class ServiceService {
         return __awaiter(this, void 0, void 0, function* () {
             const verifyIfServiceAlreadyExists = yield this.serviceRepository.findByName(data.name);
             if (verifyIfServiceAlreadyExists.length > 0) {
-                throw new error_types_1.ConflictError("Servico ja cadastrado");
+                throw Error("Servico ja cadastrado");
             }
             return yield this.serviceRepository.create(data);
         });
@@ -29,7 +28,7 @@ class ServiceService {
         return __awaiter(this, void 0, void 0, function* () {
             const service = yield this.serviceRepository.findById(id);
             if (!service) {
-                throw new error_types_1.ConflictError("Servico nao encontrado");
+                throw new Error("Servico nao encontrado");
             }
             return yield this.serviceRepository.update(id, data);
         });
@@ -38,7 +37,7 @@ class ServiceService {
         return __awaiter(this, void 0, void 0, function* () {
             const service = yield this.serviceRepository.findById(id);
             if (!service) {
-                throw new error_types_1.ConflictError("Servico nao encontrado");
+                throw new Error("Servico nao encontrado");
             }
             return yield this.serviceRepository.delete(id);
         });

@@ -1,6 +1,5 @@
 import { ICreateProfessionalDto,IUpdateProfessionalDto,IProfessionalResponseDto } from "../dtos/professional.dto";
 import { ProfessionalRepository } from "../repositories/professional.repository";
-import { ConflictError } from "../utils/error/error.types";
 
 export class ProfessionalService {
 
@@ -14,46 +13,80 @@ export class ProfessionalService {
             return await this.professionalRepository.create(data);
 
         }catch(err){
-            console.log(err);
+            console.log(err.message);
         }
     }
 
     async update(id:string,data:IUpdateProfessionalDto):Promise<IProfessionalResponseDto>{
+        try{
+            const professional = await this.professionalRepository.findById(id);
 
-        const professional = await this.professionalRepository.findById(id);
+            if(!professional) {
+                throw new Error("Profissional nao encontrado");
+            }
+    
+            return await this.professionalRepository.update(id,data);
 
-        if(!professional) {
-            throw new ConflictError("Profissional nao encontrado");
+        }catch(err){
+            console.log(err.message);
         }
 
-        return await this.professionalRepository.update(id,data);
+       
     }
 
     async delete(id:string):Promise<IProfessionalResponseDto>{
-
-        const professional = await this.professionalRepository.findById(id);
+        try{
+            const professional = await this.professionalRepository.findById(id);
 
         if(!professional) {
-            throw new ConflictError("Profissional nao encontrado");
+            throw new Error("Profissional nao encontrado");
         }
 
         return await this.professionalRepository.delete(id);
 
+        }catch(err){
+            console.log(err.message);
+        }
+
+        
+
     }
 
     async findAll():Promise<IProfessionalResponseDto[]>{
-        return await this.professionalRepository.findAll();
+        try{
+            return await this.professionalRepository.findAll();
+
+        }catch(err){
+            console.log(err.message);
+        }
+        
     }
 
     async findBySpecialty(specialty:string):Promise<IProfessionalResponseDto[]>{
-        return await this.professionalRepository.findBySpecialty(specialty);
+        try{
+            return await this.professionalRepository.findBySpecialty(specialty);
+        }catch(err){
+            console.log(err.message);
+        }
+        
     }
 
     async findByAvailable():Promise<IProfessionalResponseDto[]>{
-        return await this.professionalRepository.findByAvailable();
+        try{
+            return await this.professionalRepository.findByAvailable();
+        }catch(err){
+            console.log(err.message);
+        }
+       
     }
 
     async profile(id:string):Promise<IProfessionalResponseDto>{
-        return await this.professionalRepository.profile(id);
+        
+        try{
+            return await this.professionalRepository.profile(id);
+        }catch(err){
+            console.log(err.message);
+        }
+       
     }
 }
