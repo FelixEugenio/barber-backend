@@ -3,6 +3,8 @@ import { AppointmentService } from "../services/appointment.service";
 import { isValidDate } from "../helpers/validation/is-valid-date";
 import { sendAppointmentConfirmationEmail } from "../utils/mail/send.mail.messages";
 import { sendCancelAppointmentEmail } from "../utils/mail/send.mail.messages";
+import {io} from '../server'
+import { generateAndUploadQrCodeToCloudinary } from "../utils/cloudinary/cloudinary";
 
 const appointmentService = new AppointmentService();
 
@@ -13,6 +15,8 @@ export class AppointmentController {
        
         const appointment = await appointmentService.create({ userId, professionalId, scheduleAt, serviceId });
 
+        const qrCodeUrl:string = await generateAndUploadQrCodeToCloudinary(appointment.id);
+
         const formattedDate = new Date(appointment.scheduleAt).toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
@@ -22,7 +26,19 @@ export class AppointmentController {
             second: '2-digit'
         });
 
-        await sendAppointmentConfirmationEmail(appointment.userEmail, appointment.userName, formattedDate);
+        await sendAppointmentConfirmationEmail(appointment.userEmail, appointment.userName, formattedDate ,qrCodeUrl);
+
+        io.emit('new-appointment', {
+            message: 'Novo agendamento criado',
+            appointment:{
+                id: appointment.id,
+                userId: appointment.userId,
+                professionalId: appointment.professionalId,
+                scheduleAt: appointment.scheduleAt,
+                status: appointment.status,
+                serviceId: appointment.serviceId
+            }
+        });
 
         return res.status(201).json(appointment);
     }
@@ -41,6 +57,18 @@ export class AppointmentController {
         });
 
         await sendCancelAppointmentEmail(appointment.userEmail, appointment.userName, formattedDate);
+
+        io.emit('cancel-appointment', {
+            message: 'Agendamento cancelado',
+            appointment: {
+                id: appointment.id,
+                userId: appointment.userId,
+                professionalId: appointment.professionalId,
+                scheduleAt: appointment.scheduleAt,
+                status: appointment.status,
+                serviceId: appointment.serviceId
+            }
+        });
         
         return res.status(200).json(appointment);
     }

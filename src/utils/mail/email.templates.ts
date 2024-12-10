@@ -26,7 +26,7 @@ export const WELCOME_EMAIL_TEMPLATE = (name: string) => `
 </html>
 `;
 
-export const APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = (name: string, appointmentDate: string) => `
+export const APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = (name: string, appointmentDate: string, qrCodeUrl: string) => `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,6 +46,13 @@ export const APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = (name: string, appointmen
     <p>Fique tranquilo(a), nossa equipe estará pronta para atendê-lo(a) no horário marcado.</p>
     <p>Se precisar alterar ou cancelar o agendamento, entre em contato conosco com antecedência.</p>
     <p>Estamos ansiosos para vê-lo(a) em breve!</p>
+
+    <!-- Exibição do QR Code -->
+    <div style="text-align: center; margin-top: 20px;">
+      <p>Aqui está o seu QR Code para acessar os detalhes do seu agendamento:</p>
+      <img src="${qrCodeUrl}" alt="QR Code do Agendamento" style="max-width: 150px; border: 2px solid #4CAF50; padding: 10px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" />
+    </div>
+
     <p>Atenciosamente,<br>Equipe Salon</p>
   </div>
   <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
@@ -54,6 +61,7 @@ export const APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE = (name: string, appointmen
 </body>
 </html>
 `;
+
 
 
 export const CANCEL_APPOINTMENT_EMAIL_TEMPLATE = (name: string, appointmentDate: string) => `

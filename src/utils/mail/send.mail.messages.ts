@@ -42,12 +42,12 @@ async function sendCancelAppointmentEmail(email: string, name: string, appointme
 }
 
 // Função para enviar e-mail de confirmação de agendamento
-async function sendAppointmentConfirmationEmail(email: string, name: string, appointmentDate: string) {
+async function sendAppointmentConfirmationEmail(email: string, name: string, appointmentDate: string,qrCodeUrl: string) {
     const mailOptions = {
         from: process.env.EMAIL_FROM,
         to: email,
         subject: "Agendamento Confirmado!",
-        html: APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE(name, appointmentDate),
+        html: APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE(name, appointmentDate, qrCodeUrl),
     };
 
     try {

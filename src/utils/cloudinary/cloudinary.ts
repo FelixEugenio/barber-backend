@@ -1,4 +1,5 @@
 import cloudinary from "../../config/cloudinary.config";
+import Qrcoder from "qrcode";
 
 const uploadUserAvatar = async (file: string) => {
 
@@ -27,4 +28,19 @@ const uploadServiceImage = async (file: string) => {
     return result.secure_url;
 };
 
-export { uploadUserAvatar ,uploadProfessionalAvatar,uploadServiceImage} ;
+
+const generateAndUploadQrCodeToCloudinary = async (appointmentId:string):Promise<string> => {
+
+    const qrCodeData =  `https://www.qrbarber/appointment/${appointmentId}`;
+    const qrCodeImage = await Qrcoder.toDataURL(qrCodeData);
+
+    const result = await cloudinary.uploader.upload(qrCodeImage, {
+        folder: "qrcodes",
+        resource_type: "image",
+        public_id: `qrcode-${appointmentId}`,
+    });
+    return result.secure_url;
+
+}
+
+export { uploadUserAvatar ,uploadProfessionalAvatar,uploadServiceImage,generateAndUploadQrCodeToCloudinary} ;

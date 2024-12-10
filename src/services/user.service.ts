@@ -133,5 +133,11 @@ export class UserService {
         return await this.userRepository.update(id,data);
 
     }
+
+    async findByEmail(email:string):Promise<IUserResponseDto> {
+        const user = await this.userRepository.findByEmail(email);
+        return user;
+
+    }
      
 }

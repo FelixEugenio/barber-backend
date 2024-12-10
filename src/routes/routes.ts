@@ -6,6 +6,8 @@ import { ProfessionalController } from "../controllers/professional.controllers"
 import { AppointmentController } from "../controllers/appointment.controllers";
 import uploadConfig from "../config/multer.config";
 import multer from "multer";
+import passport from "passport";
+
 
 const usersControllers = new UsersControllers();
 const professionalController = new ProfessionalController();
@@ -15,6 +17,36 @@ const appointmentController = new AppointmentController();
 const upload = multer(uploadConfig.upload("../tmp"));
 
 const routes = Router();
+
+
+// *** Rotas de Autenticação com Google ***
+routes.get(
+    "/auth/google",
+    passport.authenticate("google", { scope: ["profile", "email"] })
+  );
+  
+  routes.get(
+    "/auth/google/callback",
+    passport.authenticate("google", { failureRedirect: "/" }),
+    (req, res) => {
+      // Se o login for bem-sucedido, o usuário é redirecionado para o dashboard ou qualquer página principal
+      res.redirect("/dashboard");  // ou a rota que deseja redirecionar após o login
+    }
+  );
+  
+  routes.get("/logout", (req, res) => {
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Erro ao sair" });
+      }
+      res.redirect("/");  // ou qualquer outra página para redirecionar após o logout
+    });
+  });
+  
+  // *** Rota para exibir o perfil do usuário autenticado ***
+  routes.get("/profile", isAuthenticated, (req, res) => {
+    return res.status(200).json(req.user);
+  });
 
 routes.post("/users", usersControllers.register);
 routes.post('/login',usersControllers.login);
