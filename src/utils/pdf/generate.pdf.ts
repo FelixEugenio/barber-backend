@@ -11,7 +11,7 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
     });
 
     // Caminho onde o PDF será gerado
-    const pdfPath = path.join(__dirname, `../../tmp-${appointmentId}.pdf`);
+    const pdfPath = path.join(__dirname, `../../tmp`, `${appointmentId}.pdf`);
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
 
@@ -45,8 +45,21 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
         const response = await axios.get(qrCodeUrl, { responseType: 'arraybuffer' });
         const qrCodeBuffer = Buffer.from(response.data);
 
-        // Adicionar o QR Code no PDF
-        doc.image(qrCodeBuffer, 200, doc.y, { width: 150, align: 'center' });
+        // Tamanho da caixa que vai conter o QR Code
+        const qrCodeBoxX = 150;
+        const qrCodeBoxY = doc.y + 10; // Coloca o QR Code um pouco abaixo do texto
+        const qrCodeBoxWidth = 200;
+        const qrCodeBoxHeight = 200;
+
+        // Criando o contorno verde onde o QR Code será inserido
+        doc.strokeColor('#16A085')
+            .lineWidth(2)
+            .rect(qrCodeBoxX - 5, qrCodeBoxY - 5, qrCodeBoxWidth + 10, qrCodeBoxHeight + 10) // Ajuste de borda
+            .stroke();
+
+        // Adicionando o QR Code dentro da caixa verde
+        doc.image(qrCodeBuffer, qrCodeBoxX, qrCodeBoxY, { width: qrCodeBoxWidth, height: qrCodeBoxHeight });
+
     } catch (error) {
         console.error('Erro ao baixar o QR Code:', error);
         doc.text('Erro ao carregar o QR Code', { align: 'center' });
@@ -56,7 +69,15 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
     doc.moveTo(50, doc.y + 160).lineTo(550, doc.y + 160).strokeColor('#16A085').lineWidth(2).stroke();
 
     // Adicionando o rodapé com informações adicionais
-    doc.moveDown(2).fontSize(12).fillColor('#95A5A6').text('Caso tenha dúvidas, entre em contato com nossa equipe de suporte.', { align: 'center' })
+    const pageHeight = doc.page.height;
+    const marginBottom = 50;  // Distância da margem inferior
+    const footerHeight = 60;  // Distância que o rodapé ocupa no final
+
+    // Ajustando a posição do rodapé para que ele apareça sempre no final da página
+    doc.moveTo(50, pageHeight - marginBottom - footerHeight)
+        .fontSize(12)
+        .fillColor('#95A5A6')
+        .text('Caso tenha dúvidas, entre em contato com nossa equipe de suporte.', { align: 'center' })
         .moveDown()
         .text('Visite nosso site para mais informações: www.suaplataforma.com', { align: 'center' });
 
