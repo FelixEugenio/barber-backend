@@ -11,7 +11,7 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
     });
 
     // Caminho onde o PDF será gerado
-    const pdfPath = path.join(__dirname, `../../tmp`, `${appointmentId}.pdf`);
+    const pdfPath = path.join(__dirname, `../../tmp-${appointmentId}.pdf`);
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
 
@@ -45,16 +45,8 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
         const response = await axios.get(qrCodeUrl, { responseType: 'arraybuffer' });
         const qrCodeBuffer = Buffer.from(response.data);
 
-        // Calcular a altura restante para posicionar o QR Code no final da página
-        const pageHeight = doc.page.height;
-        const marginBottom = 50;  // Distância da margem inferior
-        const qrCodeHeight = 150; // Tamanho do QR Code
-
-        // Posicionar o QR Code no final da página
-        const qrCodePositionY = pageHeight - marginBottom - qrCodeHeight;
-
-        // Adicionar o QR Code no final da página
-        doc.image(qrCodeBuffer, 200, qrCodePositionY, { width: 150, align: 'center' });
+        // Adicionar o QR Code no PDF
+        doc.image(qrCodeBuffer, 200, doc.y, { width: 150, align: 'center' });
     } catch (error) {
         console.error('Erro ao baixar o QR Code:', error);
         doc.text('Erro ao carregar o QR Code', { align: 'center' });
