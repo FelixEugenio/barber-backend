@@ -10,7 +10,6 @@ export class AppointmentRepository{
                 professionalId: data.professionalId,
                 scheduleAt: data.scheduleAt,
                 serviceId: data.serviceId,
-                qrCodeUrl: data.qrCodeUrl,
                 status: "PENDING"
             },
             select: {
@@ -55,7 +54,6 @@ export class AppointmentRepository{
             servicePrice: appointment.service.price,
             serviceDuration: appointment.service.duration,
             professionalName: appointment.professional.name,
-            qrCodeUrl: appointment.qrCodeUrl,
         };
     }
 
