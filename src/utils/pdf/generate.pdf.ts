@@ -26,7 +26,8 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
         underline: true
     }).moveDown();
 
-    doc.fontSize(14).fillColor('#34495E').text(`Cliente: ${appointmentData.userName}`, { width: 500, align: 'left' })
+    // Mudando a cor para verde e deslocando um pouco mais para baixo
+    doc.fontSize(14).fillColor('#27AE60').text(`Cliente: ${appointmentData.userName}`, { width: 500, align: 'left' })
         .moveDown()
         .text(`Profissional: ${appointmentData.professionalName}`, { width: 500, align: 'left' })
         .moveDown()
@@ -50,20 +51,12 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
         const response = await axios.get(qrCodeUrl, { responseType: 'arraybuffer' });
         const qrCodeBuffer = Buffer.from(response.data);
 
-        // Posicionando o QR Code dentro de uma caixa sutil
-        const qrCodeBoxX = 150;
-        const qrCodeBoxY = doc.y + 10;
-        const qrCodeBoxWidth = 200;
-        const qrCodeBoxHeight = 200;
+        // Inserindo o QR Code no centro da página
+        const qrCodeX = (doc.page.width - 200) / 2; // Centralizar horizontalmente
+        const qrCodeY = doc.y + 10;  // Ajuste da posição vertical
 
-        // Criando borda sutil para o QR Code
-        doc.strokeColor('#16A085')
-            .lineWidth(2)
-            .rect(qrCodeBoxX - 5, qrCodeBoxY - 5, qrCodeBoxWidth + 10, qrCodeBoxHeight + 10) // Borda sutil
-            .stroke();
-
-        // Inserindo o QR Code dentro da caixa
-        doc.image(qrCodeBuffer, qrCodeBoxX, qrCodeBoxY, { width: qrCodeBoxWidth, height: qrCodeBoxHeight });
+        // Inserindo o QR Code diretamente no documento
+        doc.image(qrCodeBuffer, qrCodeX, qrCodeY, { width: 200, height: 200 });
 
     } catch (error) {
         console.error('Erro ao baixar o QR Code:', error);
