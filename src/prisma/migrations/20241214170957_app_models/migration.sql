@@ -27,6 +27,7 @@ CREATE TABLE "appointments" (
     "professionalId" TEXT NOT NULL,
     "serviceId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "qrCodeUrl" TEXT,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "update_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 

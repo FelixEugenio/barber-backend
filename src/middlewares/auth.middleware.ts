@@ -1,5 +1,4 @@
 import { Request,Response,NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { IPayloadDto } from "../dtos/user.dto";
 import { verify } from "jsonwebtoken";
 

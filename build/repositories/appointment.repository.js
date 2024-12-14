@@ -20,6 +20,7 @@ class AppointmentRepository {
                     professionalId: data.professionalId,
                     scheduleAt: data.scheduleAt,
                     serviceId: data.serviceId,
+                    qrCodeUrl: data.qrCodeUrl,
                     status: "PENDING"
                 },
                 select: {
@@ -29,6 +30,7 @@ class AppointmentRepository {
                     scheduleAt: true,
                     status: true,
                     serviceId: true,
+                    qrCodeUrl: true,
                     user: {
                         select: {
                             name: true,
@@ -61,7 +63,8 @@ class AppointmentRepository {
                 serviceName: appointment.service.name,
                 servicePrice: appointment.service.price,
                 serviceDuration: appointment.service.duration,
-                professionalName: appointment.professional.name
+                professionalName: appointment.professional.name,
+                qrCodeUrl: appointment.qrCodeUrl
             };
         });
     }
@@ -73,7 +76,8 @@ class AppointmentRepository {
                     userId: data.userId,
                     professionalId: data.professionalId,
                     scheduleAt: data.scheduleAt,
-                    serviceId: data.serviceId
+                    serviceId: data.serviceId,
+                    qrCodeUrl: data.qrCodeUrl
                 },
                 select: {
                     id: true,
@@ -81,6 +85,7 @@ class AppointmentRepository {
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -114,6 +119,7 @@ class AppointmentRepository {
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -242,6 +248,7 @@ class AppointmentRepository {
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -275,6 +282,7 @@ class AppointmentRepository {
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -309,6 +317,7 @@ class AppointmentRepository {
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -342,7 +351,8 @@ class AppointmentRepository {
                 servicePrice: appointment.service.price,
                 serviceDuration: appointment.service.duration,
                 professionalName: appointment.professional.name,
-                userEmail: appointment.user.email
+                userEmail: appointment.user.email,
+                qrCodeUrl: appointment.qrCodeUrl
             };
         });
     }

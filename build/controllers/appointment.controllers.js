@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppointmentController = void 0;
 const appointment_service_1 = require("../services/appointment.service");
@@ -16,6 +19,7 @@ const send_mail_messages_1 = require("../utils/mail/send.mail.messages");
 const send_mail_messages_2 = require("../utils/mail/send.mail.messages");
 const server_1 = require("../server");
 const cloudinary_1 = require("../utils/cloudinary/cloudinary");
+const generate_pdf_1 = __importDefault(require("../utils/pdf/generate.pdf"));
 const appointmentService = new appointment_service_1.AppointmentService();
 class AppointmentController {
     create(req, res, next) {
@@ -24,6 +28,9 @@ class AppointmentController {
                 const { userId, professionalId, scheduleAt, serviceId } = req.body;
                 const appointment = yield appointmentService.create({ userId, professionalId, scheduleAt, serviceId });
                 const qrCodeUrl = yield (0, cloudinary_1.generateAndUploadQrCodeToCloudinary)(appointment.id);
+                yield appointmentService.update(appointment.id, {
+                    qrCodeUrl
+                });
                 const formattedDate = new Date(appointment.scheduleAt).toLocaleDateString('pt-BR', {
                     day: '2-digit',
                     month: '2-digit',
@@ -32,7 +39,16 @@ class AppointmentController {
                     minute: '2-digit',
                     second: '2-digit'
                 });
-                yield (0, send_mail_messages_1.sendAppointmentConfirmationEmail)(appointment.userEmail, appointment.userName, formattedDate, qrCodeUrl);
+                const pdfPath = yield (0, generate_pdf_1.default)(appointment.id, qrCodeUrl, {
+                    userName: appointment.userName,
+                    userEmail: appointment.userEmail,
+                    professionalName: appointment.professionalName,
+                    serviceName: appointment.serviceName,
+                    servicePrice: appointment.servicePrice,
+                    serviceDuration: appointment.serviceDuration,
+                    scheduleAt: formattedDate
+                });
+                yield (0, send_mail_messages_1.sendAppointmentConfirmationEmail)(appointment.userEmail, appointment.userName, formattedDate, qrCodeUrl, pdfPath);
                 server_1.io.emit('new-appointment', {
                     message: 'Novo agendamento criado',
                     appointment: {

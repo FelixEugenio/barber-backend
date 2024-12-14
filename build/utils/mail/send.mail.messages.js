@@ -53,13 +53,19 @@ function sendCancelAppointmentEmail(email, name, appointmentDate) {
     });
 }
 // Função para enviar e-mail de confirmação de agendamento
-function sendAppointmentConfirmationEmail(email, name, appointmentDate, qrCodeUrl) {
+function sendAppointmentConfirmationEmail(email, name, appointmentDate, qrCodeUrl, pdfPath) {
     return __awaiter(this, void 0, void 0, function* () {
         const mailOptions = {
             from: process.env.EMAIL_FROM,
             to: email,
             subject: "Agendamento Confirmado!",
             html: (0, email_templates_1.APPOINTMENT_CONFIRMATION_EMAIL_TEMPLATE)(name, appointmentDate, qrCodeUrl),
+            attachments: [
+                {
+                    filename: `appointment-${name}.pdf`,
+                    path: pdfPath, // Caminho do PDF gerado
+                },
+            ],
         };
         try {
             const info = yield email_config_1.transporter.sendMail(mailOptions);

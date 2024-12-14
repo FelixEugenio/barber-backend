@@ -10,6 +10,7 @@ export class AppointmentRepository{
                 professionalId: data.professionalId,
                 scheduleAt: data.scheduleAt,
                 serviceId: data.serviceId,
+                qrCodeUrl: data.qrCodeUrl,
                 status: "PENDING"
             },
             select: {
@@ -19,6 +20,7 @@ export class AppointmentRepository{
                 scheduleAt: true,
                 status: true,
                 serviceId: true,
+                qrCodeUrl: true,
                 user: {
                     select: {
                         name: true,
@@ -52,7 +54,8 @@ export class AppointmentRepository{
             serviceName: appointment.service.name,
             servicePrice: appointment.service.price,
             serviceDuration: appointment.service.duration,
-            professionalName: appointment.professional.name
+            professionalName: appointment.professional.name,
+            qrCodeUrl: appointment.qrCodeUrl
         };
     }
 
@@ -64,7 +67,9 @@ export class AppointmentRepository{
                 userId: data.userId,
                 professionalId: data.professionalId,
                 scheduleAt: data.scheduleAt,
-                serviceId: data.serviceId
+                serviceId: data.serviceId,
+                qrCodeUrl: data.qrCodeUrl
+                
             },
             select: {
                 id: true,
@@ -72,6 +77,7 @@ export class AppointmentRepository{
                 professionalId: true,
                 scheduleAt: true,
                 status: true,
+                qrCodeUrl: true,
                 serviceId: true,
                 user: {
                     select: {
@@ -104,6 +110,7 @@ export class AppointmentRepository{
                 professionalId: true,
                 scheduleAt: true,
                 status: true,
+                qrCodeUrl: true,
                 serviceId: true,
                 user: {
                     select: {
@@ -230,6 +237,7 @@ export class AppointmentRepository{
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -262,6 +270,7 @@ export class AppointmentRepository{
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -295,6 +304,7 @@ export class AppointmentRepository{
                     professionalId: true,
                     scheduleAt: true,
                     status: true,
+                    qrCodeUrl: true,
                     serviceId: true,
                     user: {
                         select: {
@@ -328,7 +338,8 @@ export class AppointmentRepository{
                 servicePrice: appointment.service.price,
                 serviceDuration: appointment.service.duration,
                 professionalName: appointment.professional.name,
-                userEmail: appointment.user.email
+                userEmail: appointment.user.email,
+                qrCodeUrl: appointment.qrCodeUrl
             };
     }
 }

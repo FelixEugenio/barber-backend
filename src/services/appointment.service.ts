@@ -124,8 +124,5 @@ export class AppointmentService {
         }catch(err){
             console.log(err.message);
         }
-
-        
-
     }
 }    

@@ -5,7 +5,7 @@ import { sendAppointmentConfirmationEmail } from "../utils/mail/send.mail.messag
 import { sendCancelAppointmentEmail } from "../utils/mail/send.mail.messages";
 import {io} from '../server'
 import { generateAndUploadQrCodeToCloudinary } from "../utils/cloudinary/cloudinary";
-import cloudinary from "../config/cloudinary.config";
+import generateAppointmentPDF from "../utils/pdf/generate.pdf";
 
 const appointmentService = new AppointmentService();
 
@@ -17,6 +17,10 @@ export class AppointmentController {
             const appointment = await appointmentService.create({ userId, professionalId, scheduleAt, serviceId });
     
             const qrCodeUrl:string = await generateAndUploadQrCodeToCloudinary(appointment.id);
+
+            await appointmentService.update(appointment.id, {
+                qrCodeUrl
+            });
     
             const formattedDate = new Date(appointment.scheduleAt).toLocaleDateString('pt-BR', {
                 day: '2-digit',
@@ -26,8 +30,18 @@ export class AppointmentController {
                 minute: '2-digit',
                 second: '2-digit'
             });
+
+            const pdfPath = await generateAppointmentPDF(appointment.id,qrCodeUrl,{
+                userName: appointment.userName,
+                userEmail: appointment.userEmail,
+                professionalName: appointment.professionalName,
+                serviceName: appointment.serviceName,
+                servicePrice: appointment.servicePrice,
+                serviceDuration: appointment.serviceDuration,
+                scheduleAt: formattedDate
+            });
     
-            await sendAppointmentConfirmationEmail(appointment.userEmail, appointment.userName, formattedDate ,qrCodeUrl);
+            await sendAppointmentConfirmationEmail(appointment.userEmail, appointment.userName, formattedDate ,qrCodeUrl,pdfPath);
     
             io.emit('new-appointment', {
                 message: 'Novo agendamento criado',
@@ -45,8 +59,6 @@ export class AppointmentController {
         }catch(err){
             next(err)
         }
-
-        
     }
 
     async cancel(req: Request, res: Response,next:NextFunction) {
@@ -138,9 +150,7 @@ export class AppointmentController {
             return res.status(200).json(appointments);
         }catch(err){
            next(err)
-        }
-
-        
+        }  
 
     }
 

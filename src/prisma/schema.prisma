@@ -30,6 +30,7 @@ model Appointment {
     professionalId String
     serviceId     String
     userId        String
+    qrCodeUrl     String?
     created_at    DateTime? @default(now())
     update_at     DateTime? @default(now())
 

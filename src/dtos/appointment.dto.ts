@@ -3,15 +3,17 @@ export interface ICreateAppointment {
     userId: string;
     scheduleAt: Date;
     serviceId: string;
+    qrCodeUrl?: string;
 }
 
 export interface IAppointmentResponse {
-    id: string;
-    userId: string;
-    professionalId: string;
-    scheduleAt: Date;
-    status: string;
-    serviceId: string;
+    id?: string;
+    userId?: string;
+    professionalId?: string;
+    scheduleAt?: Date;
+    status?: string;
+    serviceId?: string;
+    qrCodeUrl?: string;
 }
 
 export interface IAppointmentCreateAndCancelResponseDto {
@@ -27,4 +29,5 @@ export interface IAppointmentCreateAndCancelResponseDto {
     servicePrice: number;
     serviceDuration: number;
     professionalName: string;
+    qrCodeUrl?: string;
 }
