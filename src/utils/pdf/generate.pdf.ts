@@ -48,7 +48,7 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
 
         // Centralizar o QR Code e criar uma caixa arredondada ao redor
         const qrCodeX = (doc.page.width - 150) / 2;  // Centralizado
-        const qrCodeY = doc.y + 20; // Espaçamento de 20px após o texto explicativo
+        const qrCodeY = doc.page.height - 150 - 50; // Posicionar o QR Code perto do final da página (50px de margem)
         const qrCodeWidth = 150;
         const qrCodeHeight = 150;
 
