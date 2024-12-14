@@ -3,25 +3,29 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 
-// Função principal para gerar o PDF de agendamento
+// Função para gerar o PDF de agendamento
 export default async function generateAppointmentPDF(appointmentId: string, qrCodeUrl: string, appointmentData: any) {
     const doc = new PDFDocument({
         size: "A4",
         margin: 50
     });
 
-    // Caminho onde o PDF será gerado
     const pdfPath = path.join(__dirname, `../../tmp`, `${appointmentId}.pdf`);
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
 
-    // Adicionando título no topo da página
-    doc.fontSize(20).fillColor('#2C3E50').text('Confirmação de Agendamento', {
+    // Cabeçalho elegante com título centralizado
+    doc.fontSize(24).fillColor('#2C3E50').text('Confirmação de Agendamento', {
         align: 'center',
         underline: true
-    }).moveDown(2);
+    }).moveDown(1);
 
-    // Adicionando os dados do agendamento ao PDF com estilização
+    // Seção de dados do agendamento (Cliente, Profissional, etc)
+    doc.fontSize(16).fillColor('#34495E').text('Detalhes do Agendamento:', {
+        align: 'left',
+        underline: true
+    }).moveDown();
+
     doc.fontSize(14).fillColor('#34495E').text(`Cliente: ${appointmentData.userName}`, { width: 500, align: 'left' })
         .moveDown()
         .text(`Profissional: ${appointmentData.professionalName}`, { width: 500, align: 'left' })
@@ -33,31 +37,32 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
         .text(`Status: ${appointmentData.status}`, { width: 500, align: 'left' })
         .moveDown(2);
 
-    // Criando uma linha para separar a seção de dados do QR Code
-    doc.moveTo(50, doc.y).lineTo(550, doc.y).strokeColor('#16A085').lineWidth(2).stroke();
+    // Linha de separação sutil (de cor mais clara)
+    doc.moveTo(50, doc.y).lineTo(550, doc.y).strokeColor('#BDC3C7').lineWidth(1).stroke();
 
-    // Inserindo uma breve descrição sobre o QR Code
-    doc.moveDown().fontSize(14).fillColor('#7F8C8D').text('Aqui está o seu QR Code para acessar os detalhes do seu agendamento:', { align: 'center' })
-        .moveDown();
+    // QR Code - explicação do QR Code
+    doc.moveDown().fontSize(14).fillColor('#7F8C8D').text('Aqui está o seu QR Code para acessar os detalhes do seu agendamento:', {
+        align: 'center'
+    }).moveDown();
 
-    // Baixar o QR Code e inserir no PDF
+    // Baixando e inserindo o QR Code
     try {
         const response = await axios.get(qrCodeUrl, { responseType: 'arraybuffer' });
         const qrCodeBuffer = Buffer.from(response.data);
 
-        // Tamanho da caixa que vai conter o QR Code
+        // Posicionando o QR Code dentro de uma caixa sutil
         const qrCodeBoxX = 150;
-        const qrCodeBoxY = doc.y + 10; // Coloca o QR Code um pouco abaixo do texto
+        const qrCodeBoxY = doc.y + 10;
         const qrCodeBoxWidth = 200;
         const qrCodeBoxHeight = 200;
 
-        // Criando o contorno verde onde o QR Code será inserido
+        // Criando borda sutil para o QR Code
         doc.strokeColor('#16A085')
             .lineWidth(2)
-            .rect(qrCodeBoxX - 5, qrCodeBoxY - 5, qrCodeBoxWidth + 10, qrCodeBoxHeight + 10) // Ajuste de borda
+            .rect(qrCodeBoxX - 5, qrCodeBoxY - 5, qrCodeBoxWidth + 10, qrCodeBoxHeight + 10) // Borda sutil
             .stroke();
 
-        // Adicionando o QR Code dentro da caixa verde
+        // Inserindo o QR Code dentro da caixa
         doc.image(qrCodeBuffer, qrCodeBoxX, qrCodeBoxY, { width: qrCodeBoxWidth, height: qrCodeBoxHeight });
 
     } catch (error) {
@@ -65,15 +70,15 @@ export default async function generateAppointmentPDF(appointmentId: string, qrCo
         doc.text('Erro ao carregar o QR Code', { align: 'center' });
     }
 
-    // Linha de separação após o QR Code
-    doc.moveTo(50, doc.y + 160).lineTo(550, doc.y + 160).strokeColor('#16A085').lineWidth(2).stroke();
+    // Linha de separação fina após o QR Code
+    doc.moveTo(50, doc.y + 160).lineTo(550, doc.y + 160).strokeColor('#BDC3C7').lineWidth(1).stroke();
 
-    // Adicionando o rodapé com informações adicionais
+    // Rodapé com informações de suporte e website
     const pageHeight = doc.page.height;
     const marginBottom = 50;  // Distância da margem inferior
-    const footerHeight = 60;  // Distância que o rodapé ocupa no final
+    const footerHeight = 60;  // Distância que o rodapé ocupa
 
-    // Ajustando a posição do rodapé para que ele apareça sempre no final da página
+    // Ajustando a posição do rodapé para o final da página
     doc.moveTo(50, pageHeight - marginBottom - footerHeight)
         .fontSize(12)
         .fillColor('#95A5A6')

@@ -55,7 +55,7 @@ export class AppointmentRepository{
             servicePrice: appointment.service.price,
             serviceDuration: appointment.service.duration,
             professionalName: appointment.professional.name,
-            qrCodeUrl: appointment.qrCodeUrl
+            qrCodeUrl: appointment.qrCodeUrl,
         };
     }
 
