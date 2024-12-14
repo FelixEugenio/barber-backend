@@ -6,6 +6,7 @@
   "author": "felix eugenio mavila <felixmacarenco@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "prestart": "npm run clear:db",
     "start": "node ./build/server.js",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
     "prisma:migrate": "prisma migrate dev --schema=./src/prisma/schema.prisma",
