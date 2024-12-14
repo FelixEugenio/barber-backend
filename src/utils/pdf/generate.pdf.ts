@@ -11,10 +11,6 @@ export default async function generateAppointmentPDF(appointmentId:string,qrCode
 
     doc.pipe(writeStream);
 
-    doc.image('path_to_your_logo.png', 50, 50, { width: 100 }) // Logo da sua empresa
-    .fontSize(25).text('Agendamento Confirmado', 200, 50, { align: 'center' })
-    .moveDown(1);
-
     doc.fontSize(14).text(`Cliente: ${appointmentData.userName}`, { width: 500, align: 'left' })
     .moveDown()
     .text(`Profissional: ${appointmentData.professionalName}`, { width: 500, align: 'left' })
