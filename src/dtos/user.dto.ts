@@ -3,7 +3,7 @@ export interface ICreateUserDto {
     email: string;
     password: string;
     avatar?: string;
-    phoneNumber: string;
+    phoneNumber?: string;
 }
 
 export interface IUpdateUserDto {
